@@ -4,36 +4,25 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using InfoTrackSeoV2.WebApi.Models.SearchServiceModel;
+using InfoTrackSeoV2.WebApi.Services.Contracts;
 
 namespace InfoTrackSeoV2.WebApi.Controllers
 {
     public class SearchApiController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        private readonly ISearchService<GoogleSearchServiceModel> _googleSearchService;
+
+        public SearchApiController(ISearchService<GoogleSearchServiceModel> googleSearchService)
         {
-            return new string[] { "value1", "value2" };
+            _googleSearchService = googleSearchService;
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        
+        public GoogleSearchServiceModel Get(string uri, string searchTerms)
         {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            _googleSearchService.SearchAsync(uri, searchTerms);
+            return new GoogleSearchServiceModel();
         }
     }
 }
